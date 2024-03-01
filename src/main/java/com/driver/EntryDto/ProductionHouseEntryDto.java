@@ -1,10 +1,14 @@
 package com.driver.EntryDto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ProductionHouseEntryDto {
 
     private String name;
 
-    public ProductionHouseEntryDto(String name) {
+    @JsonCreator
+    public ProductionHouseEntryDto(@JsonProperty("name") String name) {
         this.name = name;
     }
 
