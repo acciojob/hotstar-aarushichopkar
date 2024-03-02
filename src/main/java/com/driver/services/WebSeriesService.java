@@ -45,7 +45,6 @@ public class WebSeriesService {
         webSeriesRepository.save(webSeries);
 
         double avgRating = productionHouseRepository.getAverageRatingByProductionHouseId(webSeries.getProductionHouse().getId());
-        System.out.println(avgRating);
         productionHouse.setRatings(avgRating);
         productionHouseRepository.save(productionHouse);
 
