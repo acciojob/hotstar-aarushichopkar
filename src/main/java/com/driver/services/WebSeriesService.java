@@ -29,7 +29,7 @@ public class WebSeriesService {
         String seriesName = webSeriesEntryDto.getSeriesName();
 
         if(webSeriesRepository.findBySeriesName(seriesName) != null && webSeriesRepository.findBySeriesName(seriesName).getSeriesName().equals(seriesName)){
-            throw new RuntimeException("Series is already present");
+            throw new Exception("Series is already present");
         }
 
         Optional<ProductionHouse> optionalProductionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId());
@@ -44,7 +44,9 @@ public class WebSeriesService {
 
         webSeriesRepository.save(webSeries);
 
-        productionHouse.setRatings(webSeries.getRating());
+        double avgRating = productionHouseRepository.getAverageRatingByProductionHouseId(webSeries.getProductionHouse().getId());
+        System.out.println(avgRating);
+        productionHouse.setRatings(avgRating);
         productionHouseRepository.save(productionHouse);
 
         return webSeries.getId();
