@@ -52,7 +52,24 @@ public class SubscriptionService {
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
 
-        return null;
+        Subscription subscription = subscriptionRepository.findByUserId(userId);
+
+        int initailAmountPaid = subscription.getTotalAmountPaid();
+
+        if(subscription.getSubscriptionType()==SubscriptionType.BASIC){
+            subscription.setSubscriptionType(SubscriptionType.PRO);
+            subscription.setTotalAmountPaid(800+250*subscription.getNoOfScreensSubscribed());
+        } else if (subscription.getSubscriptionType()==SubscriptionType.PRO) {
+            subscription.setSubscriptionType(SubscriptionType.ELITE);
+            subscription.setTotalAmountPaid(1000+350*subscription.getNoOfScreensSubscribed());
+        }
+        else {
+            throw new Exception("Already the best Subscription");
+        }
+        subscriptionRepository.save(subscription);
+
+        int finalAmountPaid = subscription.getTotalAmountPaid();
+        return finalAmountPaid - initailAmountPaid;
     }
 
     public Integer calculateTotalRevenueOfHotstar(){
