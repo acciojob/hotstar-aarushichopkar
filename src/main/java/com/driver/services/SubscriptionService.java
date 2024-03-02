@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscriptionService {
@@ -25,8 +26,24 @@ public class SubscriptionService {
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
 
         //Save The subscription Object into the Db and return the total Amount that user has to pay
+        Subscription subscription = new Subscription();
+        subscription.setSubscriptionType(subscriptionEntryDto.getSubscriptionType());
+        subscription.setNoOfScreensSubscribed(subscriptionEntryDto.getNoOfScreensRequired());
+        subscription.setStartSubscriptionDate(new java.util.Date());
+        subscription.setUser(userRepository.findById(subscriptionEntryDto.getUserId()).get());
 
-        return null;
+        int totalAmountPaid;
+        if(subscription.getSubscriptionType()==SubscriptionType.BASIC){
+            totalAmountPaid = 500+200*subscription.getNoOfScreensSubscribed();
+        } else if (subscription.getSubscriptionType()==SubscriptionType.PRO) {
+            totalAmountPaid = 800+250*subscription.getNoOfScreensSubscribed();
+        }
+        else {
+            totalAmountPaid = 1000+350*subscription.getNoOfScreensSubscribed();
+        }
+        subscription.setTotalAmountPaid(totalAmountPaid);
+        subscriptionRepository.save(subscription);
+        return subscription.getTotalAmountPaid();
     }
 
     public Integer upgradeSubscription(Integer userId)throws Exception{
