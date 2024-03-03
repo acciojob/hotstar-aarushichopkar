@@ -75,6 +75,7 @@ public class SubscriptionService {
         }
         else{
             throw new NullPointerException("User has no subscription");
+            //testing
         }
     }
 
