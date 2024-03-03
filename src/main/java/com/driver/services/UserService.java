@@ -34,31 +34,36 @@ public class UserService {
         //Return the count of all webSeries that a user can watch based on his ageLimit and subscriptionType
         //Hint: Take out all the Webseries from the WebRepository
 
-        User user = userRepository.findById(userId).get();
-        Integer userAge = user.getAge();
-        Subscription userSubs = user.getSubscription();
-        List<WebSeries> availableWebSeries = webSeriesRepository.findAllByAgeLimitLessThanEqual(userAge);
-        int basicPlanCount=0;
-        int proPlanCount=0;
-        int elitePlanCount=0;
+        if(userRepository.findById(userId).isPresent()){
+            User user = userRepository.findById(userId).get();
+            Integer userAge = user.getAge();
+            Subscription userSubs = user.getSubscription();
+            List<WebSeries> availableWebSeries = webSeriesRepository.findAllByAgeLimitLessThanEqual(userAge);
+            int basicPlanCount=0;
+            int proPlanCount=0;
+            int elitePlanCount=0;
 
-        for(WebSeries ws: availableWebSeries){
-            if(ws.getSubscriptionType()==SubscriptionType.BASIC){
-                basicPlanCount++;
-            } else if (ws.getSubscriptionType()==SubscriptionType.PRO) {
-                proPlanCount++;
+            for(WebSeries ws: availableWebSeries){
+                if(ws.getSubscriptionType()==SubscriptionType.BASIC){
+                    basicPlanCount++;
+                } else if (ws.getSubscriptionType()==SubscriptionType.PRO) {
+                    proPlanCount++;
+                }
+                else{
+                    elitePlanCount++;
+                }
             }
-            else{
-                elitePlanCount++;
+            if(user.getSubscription().getSubscriptionType()==SubscriptionType.BASIC){
+                return basicPlanCount;
+            } else if (user.getSubscription().getSubscriptionType()==SubscriptionType.PRO) {
+                return basicPlanCount+proPlanCount;
+            }
+            else {
+                return basicPlanCount+proPlanCount+elitePlanCount;
             }
         }
-        if(user.getSubscription().getSubscriptionType()==SubscriptionType.BASIC){
-            return basicPlanCount;
-        } else if (user.getSubscription().getSubscriptionType()==SubscriptionType.PRO) {
-            return basicPlanCount+proPlanCount;
-        }
-        else {
-            return basicPlanCount+proPlanCount+elitePlanCount;
+        else{
+            throw new NullPointerException("User not Present");
         }
 
     }
