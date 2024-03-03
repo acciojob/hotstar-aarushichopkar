@@ -64,7 +64,7 @@ public class SubscriptionService {
             subscription.setTotalAmountPaid(1000+350*subscription.getNoOfScreensSubscribed());
         }
         else {
-            throw new Exception("Already the best Subscription");
+            throw new RuntimeException("Already the best Subscription");
         }
         subscriptionRepository.save(subscription);
 
