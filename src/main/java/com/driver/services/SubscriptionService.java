@@ -52,10 +52,8 @@ public class SubscriptionService {
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
 
-        Optional<Subscription> optionalSubscription = subscriptionRepository.findByUserId(userId);
-        if(optionalSubscription.isPresent()){
-            Subscription subscription = optionalSubscription.get();
-
+        try{
+            Subscription subscription = subscriptionRepository.findByUserId(userId).get();
             int initailAmountPaid = subscription.getTotalAmountPaid();
 
             if(subscription.getSubscriptionType()==SubscriptionType.BASIC){
@@ -73,9 +71,8 @@ public class SubscriptionService {
             int finalAmountPaid = subscription.getTotalAmountPaid();
             return finalAmountPaid - initailAmountPaid;
         }
-        else{
+        catch (Exception e){
             throw new NullPointerException("User has no subscription");
-            //testing
         }
     }
 
