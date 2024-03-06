@@ -68,7 +68,7 @@ public class SubscriptionService {
             else {
                 throw new RuntimeException("Already the best Subscription");
             }
-            subscriptionRepository.save(subscription);
+//            subscriptionRepository.save(subscription);
 
             int finalAmountPaid = subscription.getTotalAmountPaid();
             return finalAmountPaid - initailAmountPaid;
