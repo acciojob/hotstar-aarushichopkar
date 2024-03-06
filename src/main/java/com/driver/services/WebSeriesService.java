@@ -42,7 +42,7 @@ public class WebSeriesService {
         webSeries.setSubscriptionType(webSeriesEntryDto.getSubscriptionType());
         webSeries.setProductionHouse(productionHouse);
 
-        webSeriesRepository.save(webSeries);
+//        webSeriesRepository.save(webSeries);
 
         double avgRating = productionHouseRepository.getAverageRatingByProductionHouseId(webSeries.getProductionHouse().getId());
         productionHouse.setRatings(avgRating);
